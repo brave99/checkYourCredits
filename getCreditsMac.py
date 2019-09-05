@@ -3,7 +3,6 @@ from selenium.webdriver.common.keys import Keys
 
 import re
 from configparser import ConfigParser
-#https://www.k-hitorigoto.online/entry/2017/03/09/223538
 
 #===== config =====#
 ini = ConfigParser()
