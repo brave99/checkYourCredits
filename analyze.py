@@ -28,6 +28,8 @@ def analyze(credits, sum, sannen, yonen):
             "bisekiORgairon":False,"senkeiORshiten":False,
             "micro1":False,"micro2":False,"zaishi1":False,"zaishi2":False,}
 
+    graduate = True
+
     for i in credits:
         ### 般教 ###
         if i[0].startswith('10-21-'):#般教1系
@@ -279,7 +281,12 @@ def analyze(credits, sum, sannen, yonen):
     senmon+=kihon
     if len(count)<3 or senmon<68:
         graduate=False
+
     print("専門教育科目取得単位数",senmon,"(必要単位68)")
+    if senmon>68:
+        over=senmon-68
+        print("専門教育科目から卒業認定単位に",over,"単位が使われます。")
+        nintei+=over
 
     ### 自主選択科目 ###
     print("\n### 自主選択科目 ###")

@@ -31,7 +31,7 @@ elem.send_keys(password)
 elem.send_keys(Keys.RETURN)
 
 table = driver.find_element_by_class_name('main')
-trs = table.find_elements_by_tag_name("tr")
+trs = table.find_elements_by_tag_name('tr')
 
 seiseki = []
 
@@ -42,7 +42,6 @@ for i in trs:
 ### 変数を用意 ###
 sum = 0
 credits = []
-graduate = True
 
 ### 3,4年生の進級条件 ###
 sannen=0# 3年次取得単位

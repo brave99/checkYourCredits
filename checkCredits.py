@@ -16,7 +16,6 @@ seiseki = csv.reader(file)
 ### 変数を用意 ###
 sum = 0
 credits = []
-graduate = True
 
 for i in seiseki:
     if len(i)>1:
@@ -66,22 +65,22 @@ yonen=0# 4年次取得単位
 if direct:
     seiseki=[x for x in seiseki]
     for i in seiseki:
-        if i[-1].startswith("3年") and not (i[2].startswith("Ｄ") or i[2].startswith("Ｆ")):# DとFが落単
+        if i[-1].startswith("3年") and not (i[2].startswith("Ｄ") or i[2].startswith("Ｆ") or i[2].startswith("？")):
             sannen+=int(i[3])
-        elif i[-1].startswith("4年") and not (i[2].startswith("Ｄ") or i[2].startswith("Ｆ")):
+        elif i[-1].startswith("4年") and not (i[2].startswith("Ｄ") or i[2].startswith("Ｆ") or i[2].startswith("？")):
             yonen+=int(i[3])
 else:
     for j in seiseki:
         if j[0][-2:]=="3年":
             hoge=j[0].split(" ")# 最初からこれやった方がいいな？
-            if not (hoge[-7].startswith("Ｄ") or hoge[-7].startswith("Ｆ")):# DとFが落単
+            if not (hoge[-7].startswith("Ｄ") or hoge[-7].startswith("Ｆ") or hoge[-7].startswith("？")):
                 sannen+=int(float(hoge[-6]))
-            elif not (i[-7].startswith("Ｄ") or hoge[-7].startswith("Ｆ")):
+            elif not (i[-7].startswith("Ｄ") or hoge[-7].startswith("Ｆ") or hoge[-7].startswith("？")):
                 yonen+=int(float(hoge[-6]))
         elif j[0][-2:]=="4年":
-            if not (hoge[-7].startswith("Ｄ") or hoge[-7].startswith("Ｆ")):
+            if not (hoge[-7].startswith("Ｄ") or hoge[-7].startswith("Ｆ") or hoge[-7].startswith("？")):
                 sannen+=int(float(hoge[-6]))
-            elif not (hoge[-7].startswith("Ｄ") or hoge[-7].startswith("Ｆ")):
+            elif not (hoge[-7].startswith("Ｄ") or hoge[-7].startswith("Ｆ") or hoge[-7].startswith("？")):
                 yonen+=int(float(hoge[-6]))
 file.close()# 開けたら閉める
 
