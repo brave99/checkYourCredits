@@ -11,7 +11,6 @@ def analyze(credits, sum, sannen, yonen):
     gogaku=0
     #- 専門教育科目 -#
     senmon=0
-    senmon_kiso=0
     sentaku=0
     kihon=0
     bunya={"A":0,"B":0,"C":0,"D":0,"E":0,"F":0,"G":0,"H":0,"I":0,"J":0}
@@ -22,7 +21,9 @@ def analyze(credits, sum, sannen, yonen):
     jishu3=0#体育の3単位までの枠と2単位までの枠
     jishu2=0#合計で4単位まで
     #- 自由科目 -#
-    free=0
+    free=0#自由科目全体がこれ。内訳は以下2つ
+    freei=0#進級要件に含まれるもの(履修申告上限内)
+    freeo=0#含まれないもの(上限外)
     #- 必修科目 -#
     hisshu={"macro1":False,"macro2":False,"toukei1":False,"toukei2":False,
             "bisekiORgairon":False,"senkeiORshiten":False,
@@ -191,8 +192,11 @@ def analyze(credits, sum, sannen, yonen):
             nintei+=i[1]
 
         ### 自由科目 ###
-        elif i[0].startswith('60-'):# 卒業の単位にはカウントされない
-            sum-=i[1]
+        elif i[0].startswith('60-30-'):# 卒業の単位にはカウントされないが、進級要件には入る
+            freei+=i[1]
+        elif i[0].startswith('60-39-'):# 進級にもカウントされない
+            freeo+=i[1]
+
     """
     print("般教 ",pankyo1+pankyo2+pankyo3)
     print("基礎教育科目 ",kiso)
@@ -204,20 +208,20 @@ def analyze(credits, sum, sannen, yonen):
     #===== 必要単位分析 =====#
     ### 般教分析 ###
     print("\n### 総合教育科目 ###")
-    print("般教取得単位数",pankyo1+pankyo2+pankyo3,"(必要単位1系6, 2系10, その他4)")
-    if pankyo1 > 6:
+    print("般教取得単位数\n1系",pankyo1,", 2系",pankyo2,", 3系",pankyo3,"(必要単位1系6, 2系10, その他4)")
+    if pankyo1 >= 6:
         print("般教1系ok")
     else:
         print("般教1系不足")
         graduate=False
 
-    if pankyo2 > 10:
+    if pankyo2 >= 10:
         print("般教2系ok")
     else:
         print("般教2系不足")
         graduate=False
 
-    if pankyo1+pankyo2+pankyo3 > 4:
+    if pankyo1+pankyo2+pankyo3 >= 4:
         print("般教1or2or3系ok")
         if pankyo1+pankyo2+pankyo3>20:
             print("般教から卒業認定単位に",pankyo1+pankyo2+pankyo3-20,"単位分が使われます。")
@@ -306,9 +310,14 @@ def analyze(credits, sum, sannen, yonen):
         nintei+=jishu
 
     ### 自由科目 ###
+    free=freei+freeo
     if free>0:
         print("\n### 自由科目 ###")
         print("自由科目扱いの単位が",free,"単位あります。\nこれらは卒業単位には含まれません。")
+        if freei>0:
+            print("ただし、履修申告上限内の",freei,"単位は当該年次の進級要件には含まれます。")
+        if freeo>0:
+            print("また、履修申告上限外の",freeo,"単位は進級要件にも含まれません。")
 
     ### 卒業認定単位 ###
     print("\n### 卒業認定単位 ###")
@@ -317,7 +326,7 @@ def analyze(credits, sum, sannen, yonen):
 
     #===== 判定 =====#
     print("\n### 判定 ###")
-    if sum<126:
+    if sum<126+free:#自由科目は卒業単位には含まれない
         graduate=False
     print('取得単位合計', sum, '単位')
 
@@ -325,7 +334,7 @@ def analyze(credits, sum, sannen, yonen):
     #MEMO 自由科目は卒業単位にならないだけで進級要件の単位には数えられる
 
     #- 2年生への進級 -#
-    if sum+free>24:#2年への進級は取得単位24以上のみ
+    if sum>=24:#2年への進級は取得単位24以上のみ
         print("2年生に進級できます。")
     else:
         print("2年生に進級できません。")
@@ -333,14 +342,14 @@ def analyze(credits, sum, sannen, yonen):
     #- 3年性への進級 -#
     kisokyouiku=(hisshu["toukei1"]+hisshu["toukei2"]+hisshu["bisekiORgairon"]+hisshu["senkeiORshiten"])*2#基礎教育科目から4単位以上
     senmonkiso=(hisshu["macro1"]+hisshu["macro2"]+hisshu["micro1"]+hisshu["micro2"]+hisshu["zaishi1"]+hisshu["zaishi2"])*2#専門基礎科目から8単位以上
-    # 取得単位60・選択必修4・必修の基礎教育4・必修の専門教育基礎8・外国語科目8以上
-    if sum+free>60 and sentaku>=4 and kisokyouiku>=4 and senmonkiso>=8 and gogaku >=8:
+    # 取得単位60・選択必修4・必修の基礎教育4・必修の専門基礎8・外国語科目8以上
+    if sum>=60 and sentaku>=4 and kisokyouiku>=4 and senmonkiso>=8 and gogaku>=8:
         print("3年生に進級できます。")
     else:
         print("3年生に進級できません。")
 
     #- 4年生への進級 -#
-    print('3年次取得単位数 ',sannen)
+    print('3年次取得単位数',sannen)
     if kiso>=8 and senmonkiso+sentaku>=16 and sannen>=28:
         print("4年生に進級できます。")
     else:

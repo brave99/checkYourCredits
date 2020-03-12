@@ -17,6 +17,9 @@ password = config['password']
 driver = webdriver.Chrome('./chromedriver.exe')
 driver.get('https://www2.adst.keio.ac.jp/rcs/login')
 
+from time import sleep
+sleep(1)
+
 usr = driver.find_element_by_id('username')
 pwd = driver.find_element_by_id('password')
 
