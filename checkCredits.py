@@ -75,13 +75,10 @@ else:
             hoge=j[0].split(" ")# 最初からこれやった方がいいな？
             if not (hoge[-7].startswith("Ｄ") or hoge[-7].startswith("Ｆ") or hoge[-7].startswith("？")):
                 sannen+=int(float(hoge[-6]))
-            elif not (i[-7].startswith("Ｄ") or hoge[-7].startswith("Ｆ") or hoge[-7].startswith("？")):
-                yonen+=int(float(hoge[-6]))
         elif j[0][-2:]=="4年":
             if not (hoge[-7].startswith("Ｄ") or hoge[-7].startswith("Ｆ") or hoge[-7].startswith("？")):
-                sannen+=int(float(hoge[-6]))
-            elif not (hoge[-7].startswith("Ｄ") or hoge[-7].startswith("Ｆ") or hoge[-7].startswith("？")):
                 yonen+=int(float(hoge[-6]))
+
 file.close()# 開けたら閉める
 
 analyze(credits,sum, sannen, yonen)
