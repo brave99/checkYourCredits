@@ -74,13 +74,9 @@ for j in seiseki:
         hoge=j.split(" ")# 最初からこれやった方がいいな？
         if not ((hoge[-7].startswith("Ｄ") or hoge[-7].startswith("Ｆ")) or hoge[-7].startswith("？")):# DとFが落単
             sannen+=int(float(hoge[-6]))
-        elif not ((hoge[-7].startswith("Ｄ") or hoge[-7].startswith("Ｆ")) or hoge[-7].startswith("？")):
-            yonen+=int(float(hoge[-6]))
     elif j[-2:]=="4年":
         hoge=j.split(" ")
         if not ((hoge[-7].startswith("Ｄ") or hoge[-7].startswith("Ｆ")) or hoge[-7].startswith("？")):
             yonen+=int(float(hoge[-6]))
-        elif not ((hoge[-7].startswith("Ｄ") or hoge[-7].startswith("Ｆ")) or hoge[-7].startswith("？")):
-            sannen+=int(float(hoge[-6]))
 
 analyze(credits,sum, sannen, yonen)
