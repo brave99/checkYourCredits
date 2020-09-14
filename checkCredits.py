@@ -12,7 +12,6 @@ print("\n#===== 卒業・進級判定プログラム =====#")
 filename='seiseki.csv'# このcsvはkeio.jpで表示される成績をExcelにコピペしてUTF8で保存したもの
 file = open(filename,'r')
 seiseki = csv.reader(file)
-
 ### 変数を用意 ###
 sum = 0
 credits = []
@@ -37,7 +36,9 @@ if direct:# 直接Excelにコピペした場合
 
 else:# ワンクッション挟んでコピペした場合
     for j in seiseki:
-        if len(j)>1:
+        if len(j)==0:
+            pass
+        elif len(j)>1:
             if j.startswith('分野'):
                 index = j.find('取得合計')
                 if index>0:
@@ -56,7 +57,7 @@ else:# ワンクッション挟んでコピペした場合
                     #print('分野', j[0][3:11], 'を', num, '単位')#for debug
 file.close()
 file = open(filename,'r')# ポインタの関係からか、なぜか開き直さないとうまくいかない
-seiseki = csv.reader(file)#TODO 上の並行して3,4年の取得単位取るようにする
+seiseki = csv.reader(file)#TODO 上の並行して3,4年の取得単位も取るようにする
 
 ### 3,4年生の進級条件 ###
 sannen=0# 3年次取得単位
@@ -65,20 +66,25 @@ yonen=0# 4年次取得単位
 if direct:
     seiseki=[x for x in seiseki]
     for i in seiseki:
-        if i[-1].startswith("3年") and not (i[2].startswith("Ｄ") or i[2].startswith("Ｆ") or i[2].startswith("？")):
+        if len(i)==0:
+            pass
+        elif i[-1].startswith("3年") and not (i[2].startswith("Ｄ") or i[2].startswith("Ｆ") or i[2].startswith("？")):
             sannen+=int(i[3])
         elif i[-1].startswith("4年") and not (i[2].startswith("Ｄ") or i[2].startswith("Ｆ") or i[2].startswith("？")):
             yonen+=int(i[3])
 else:
     for j in seiseki:
-        if j[0][-2:]=="3年":
-            hoge=j[0].split(" ")# 最初からこれやった方がいいな？
+        #print(j)
+        if len(j)==0:
+            pass
+        elif j[0][-2:]=="3年":
+            hoge=j[0].split(" ")
             if not (hoge[-7].startswith("Ｄ") or hoge[-7].startswith("Ｆ") or hoge[-7].startswith("？")):
                 sannen+=int(float(hoge[-6]))
         elif j[0][-2:]=="4年":
+            hoge=j[0].split(" ")
             if not (hoge[-7].startswith("Ｄ") or hoge[-7].startswith("Ｆ") or hoge[-7].startswith("？")):
                 yonen+=int(float(hoge[-6]))
-
 file.close()# 開けたら閉める
 
 analyze(credits,sum, sannen, yonen)
